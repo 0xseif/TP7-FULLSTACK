@@ -11,14 +11,13 @@ const port = 3000;
 app.use(bodyParser.json());
 
 // Route pour ajouter un livre
-app.post('/livres', (req, res) => {
+app.post('/livres', async (req, res) => {
 try {
 
-12
 
 const { titre, auteur, date_publication, genre, disponible } = req.body;
 const livre = new Livre({ titre, auteur, date_publication, genre, disponible });
-livre.save();
+await livre.save();
 res.status(201).json({ message: 'Livre ajouté avec succès', livre });
 } catch (err) {
 res.status(500).json({ message: 'Erreur lors de l\'ajout du livre', error: err });
@@ -60,9 +59,9 @@ res.status(500).json({ message: 'Erreur lors de la mise à jour du livre', error
 });
 
 // Route pour supprimer un livre
-app.delete('/livres/:id', (req, res) => {
+app.delete('/livres/:id', async (req, res) => {
 try {
-const livre = Livre.findByIdAndDelete(req.params.id);
+const livre =await Livre.findByIdAndDelete(req.params.id);
 if (!livre) {
 return res.status(404).json({ message: 'Livre non trouvé' });
 }
